@@ -1,16 +1,17 @@
 {
-    "fekit_extension_command_name":"template",
-    "name": "fekit-extension-template",
-    "version": "0.0.1",
-    "description": "",
-    "dependencies": {},
-    "main": "index.js",
-    "scripts": {},
-    "repository": "",
-    "author": "",
-    "license": "BSD",
-    "scripts":{
-        "postinstall":"node ./scripts/postinstall.js",
-        "preuninstall":"node ./scripts/preuninstall.js"
-    }
+  "fekit_extension_command_name": "doc",
+  "name": "fekit-extension-doc",
+  "version": "0.0.1",
+  "description": "生成文档",
+  "dependencies": {
+    "jsdoc": "^3.3.0-alpha9"
+  },
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "node ./scripts/postinstall.js",
+    "preuninstall": "node ./scripts/preuninstall.js"
+  },
+  "repository": "",
+  "author": "",
+  "license": "BSD"
 }
