@@ -1,8 +1,8 @@
 {
   "fekit_extension_command_name": "doc",
   "name": "fekit-extension-doc",
-  "version": "0.0.1",
-  "description": "生成文档",
+  "version": "0.0.3",
+  "description": "生成js文档",
   "dependencies": {
     "jsdoc": "^3.3.0-alpha9"
   },
@@ -11,7 +11,7 @@
     "postinstall": "node ./scripts/postinstall.js",
     "preuninstall": "node ./scripts/preuninstall.js"
   },
-  "repository": "",
-  "author": "",
+  "repository": "https://www.npmjs.org/package/fekit-extension-doc",
+  "author": "an.han",
   "license": "BSD"
 }

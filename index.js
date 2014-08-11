@@ -1,79 +1,58 @@
 /**
- * 生成文档
- * @type {string}
+ * Created by an.han on 14-8-10.
  */
 
-
-exports.usage = "生成文档"
+exports.usage = "生成js文档"
 
 var path = require('path')
 var fs = require('fs')
-var spawn = require('child_process').spawn
+var child_process = require('child_process')
 
-var CWD = null
-var command = './node_modules/.bin/jsdoc'
+var jsdoc = path.resolve(__dirname,'./node_modules/jsdoc/jsdoc.js')
+var cwd = null
+var fekitConfig = null;
+var docSources = null;
 
-var fekitConfig = JSON.parse(fs.readFileSync(path.resolve(CWD, './fekit.config')))
-var docSources = fekitConfig.docs
+var task = {
 
+    init: function (options) {
+        this.options = options;
+        cwd = options.cwd;
+        fekitConfig = JSON.parse(fs.readFileSync(path.resolve(cwd, './fekit.config')));
+        docSources = fekitConfig.docs || [];
+    },
 
-function use(args, cb) {
-    if (typeof args == 'function') {
-        cb = args
-        args = []
+    cmd: function (jsPath) {
+        var process = child_process.fork(jsdoc, ['--destination', 'doc', path.resolve(cwd, './src/', jsPath)], {cwd: cwd});
+
+        process.on('error', function (err) {
+            console.log(err);
+        })
+
+        process.on('exit', function (code, signal) {
+            switch (code) {
+                case 1:
+                    console.log('[ERROR] code:' + code);
+                    break;
+                case 127:
+                    console.log('[ERROR] can not find this command, code:' + code);
+                    break;
+                default:
+                    console.log('[LOG] jsdoc: ' + jsPath + ' is finished. code:' + code);
+                    break;
+            }
+        });
+    },
+
+    generate: function () {
+        var self = this;
+        docSources.forEach(function (jsPath) {
+            self.cmd(jsPath);
+        })
     }
-    var cmd = spawn(command, args, {
-        cwd: CWD
-    })
-
-    var err = ''
-    cmd.stderr.on('data', function (data) {
-        err += data
-    })
-
-    var output = ''
-    cmd.stdout.on('data', function (data) {
-        output += data
-    })
-
-    cmd.on('error', function (err) {
-        if (err.code == 'ENOENT') {
-            return cb('[ERROR] 找不到' + command + '命令。')
-        }
-    })
-
-    cmd.on('exit', function (code, signal) {
-        switch (code) {
-            case 1:
-                cb('[ERROR] ' + err)
-                break
-            case 127:
-                cb('[ERROR] 找不到' + command + '命令。')
-                break
-            default:
-                cb(null, output)
-                break
-        }
-    })
-}
-
-function jsdoc(options) {
-    docSources.forEach(function (js) {
-        use(['--destination', 'doc', 'src/' + jsPath])
-    })
-}
-
-exports.set_options = function (optimist) {
-    optimist.alias('c', 'checkout')
-    optimist.describe('c', '检出指定项目的trunk，如 fekit svn -c flight')
-
-    optimist.alias('b', 'branch')
-    return optimist.describe('b', '创建新的分支，如 fekit svn -b flight:bugfix')
 }
 
 exports.run = function (options) {
-    CWD = options.cwd
-    use(function (err, output) {
-        console.info(err || output);
-    })
+    task.init(options);
+    task.generate();
 }
