@@ -11,7 +11,7 @@
     "postinstall": "node ./scripts/postinstall.js",
     "preuninstall": "node ./scripts/preuninstall.js"
   },
-  "repository": "https://www.npmjs.org/package/fekit-extension-doc",
+  "repository": "https://github.com/hanan198501/fekit-extension-doc.git",
   "author": "an.han",
   "license": "BSD"
 }
