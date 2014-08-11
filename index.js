@@ -12,7 +12,7 @@ var jsdoc = path.resolve(__dirname,'./node_modules/jsdoc/jsdoc.js')
 var fekitConfig = null;
 var docSources = null;
 var cwd = null;
-var docDest = './src';
+var docDest = 'docs';
 
 var task = {
 
@@ -27,7 +27,7 @@ var task = {
     },
 
     cmd: function (jsPath) {
-        var process = child_process.fork(jsdoc, ['--destination', 'doc', path.resolve(cwd, docDest, jsPath)], {cwd: cwd});
+        var process = child_process.fork(jsdoc, ['--destination', docDest, path.resolve(cwd, './src', jsPath)], {cwd: cwd});
 
         process.on('error', function (err) {
             console.log(err);
@@ -59,7 +59,7 @@ var task = {
 
 exports.set_options = function( optimist ){
     optimist.alias('d','dest')
-    optimist.describe('c','指定文档输出路径，如 fekit doc -d ./doc， 默认为./doc')
+    return optimist.describe('d','指定文档输出路径，如 fekit doc -d docs， 默认为docs')
 }
 
 
