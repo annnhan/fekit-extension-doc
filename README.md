@@ -30,7 +30,7 @@ FEKIT DOC
 
     fekit doc
 
-即可在doc目录下生成api文档。
+即可在docs目录下生成api文档。
 
 也可以指定文档生成目录：
 

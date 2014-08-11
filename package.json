@@ -1,7 +1,7 @@
 {
   "fekit_extension_command_name": "doc",
   "name": "fekit-extension-doc",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "description": "生成js文档",
   "dependencies": {
     "jsdoc": "^3.3.0-alpha9"
