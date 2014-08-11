@@ -32,3 +32,9 @@ FEKIT DOC
 
 即可在doc目录下生成api文档。
 
+也可以指定文档生成目录：
+
+    fekit doc -d mydocs
+
+即可在mydocs目录下生成api文档。
+
