@@ -4,7 +4,8 @@
   "version": "0.0.7",
   "description": "生成js文档",
   "dependencies": {
-    "jsdoc": "^3.3.0-alpha9"
+    "jsdoc": "^3.3.0-alpha9",
+    "rd": "0.0.2"
   },
   "main": "index.js",
   "scripts": {
