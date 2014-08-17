@@ -1,14 +1,6 @@
 /**
  * Created by an.han on 14-8-10.
  */
-var jsdocConfig = {
-    "source": {
-        "include": [],
-        "exclude": [],
-        "includePattern": ".+\\.js(doc)?$",
-        "excludePattern": "(^|\\/|\\\\)_"
-    }
-}
 
 exports.usage = "生成js文档"
 
@@ -18,13 +10,33 @@ var path = require('path');
 var child_process = require('child_process');
 var jsdoc = path.resolve(__dirname, './node_modules/jsdoc/jsdoc.js');
 
-var fekitConfig = null; //fekit.config
-var cwd = null;         //运行fekit的目录
-var complete = true;    //是否全部生成文档
+//fekit.config
+var fekitConfig = null;
 
-var docSrcPath = null;  //js源文件根目录的绝对路径
-var docDest = 'docs';   //生成文档的目录
-var docSrc = './src';   //js源文件根目录
+//运行fekit的目录
+var cwd = null;
+
+//是否全部生成文档
+var complete = false;
+
+//js源文件根目录的绝对路径
+var docSrcPath = null;
+
+//生成文档的目录
+var docDest = 'docs';
+
+//js源文件根目录
+var docSrc = './src';
+
+//jsdoc配置
+var jsdocConfig = {
+    "source": {
+        "include": [],
+        "exclude": [],
+        "includePattern": ".+\\.js(doc)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
+    }
+}
 
 
 var task = {
