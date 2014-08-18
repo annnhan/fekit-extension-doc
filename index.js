@@ -5,7 +5,6 @@
 exports.usage = "生成js文档"
 
 var fs = require('fs');
-var rd = require('rd');
 var path = require('path');
 var child_process = require('child_process');
 var jsdoc = path.resolve(__dirname, './node_modules/jsdoc/jsdoc.js');
@@ -16,9 +15,6 @@ var fekitConfig = null;
 //运行fekit的目录
 var cwd = null;
 
-//是否全部生成文档
-var complete = false;
-
 //js源文件根目录的绝对路径
 var docSrcPath = null;
 
@@ -28,16 +24,6 @@ var docDest = 'docs';
 //js源文件根目录
 var docSrc = './src';
 
-//jsdoc配置
-var jsdocConfig = {
-    "source": {
-        "include": [],
-        "exclude": [],
-        "includePattern": ".+\\.js(doc)?$",
-        "excludePattern": "(^|\\/|\\\\)_"
-    }
-}
-
 
 var task = {
     init: function (options) {
@@ -45,10 +31,13 @@ var task = {
         cwd = options.cwd;
         docSrcPath = path.resolve(cwd, docSrc);
         fekitConfig = JSON.parse(fs.readFileSync(path.resolve(cwd, './fekit.config')));
+        fekitConfig.docs = fekitConfig.docs || [];
 
         if (options.dest) {
             docDest = options.dest;
         }
+
+        this.generate();
     },
 
     /**
@@ -67,7 +56,7 @@ var task = {
 
         var process = child_process.fork(jsdoc, ['--destination', output, source], {cwd: cwd});
 
-        console.log('[LOG] 开始生成文档: ', source);
+        console.log('[LOG] 开始生成文档:', source);
 
         process.on('error', function (err) {
             console.log(err);
@@ -82,7 +71,7 @@ var task = {
                     console.log('[ERROR] can not find this command, code:' + code);
                     break;
                 default:
-                    console.log('[LOG] 成功生成文档: ', source, ' ==> ', output);
+                    console.log('[LOG] 成功生成文档:', source, ' => ', output);
                     break;
             }
         });
@@ -92,37 +81,34 @@ var task = {
 
     generate: function () {
         var self = this;
-        if (complete) {
-            rd.each(docSrcPath, function (file, fileType, next) {
-                if (fileType.isFile() && /\.js$/.test(file)) {
-                    self.cmd(file, true).on('exit', next);
-                }
-                else {
-                    next();
-                }
+        var cur = 0,
+            docs = fekitConfig.docs;
+            len = docs.length;
 
-            }, function (err) {
-                if (err) {
-                    throw err;
-                }
-            });
+        function cmd() {
+            if (cur <= (len - 1) && len) {
+                self.cmd(docs[cur], false).on('exit', cmd);
+                ++cur;
+            }
         }
-        else {
-            (fekitConfig.docs || []).forEach(function (file) {
-                self.cmd(file, false);
-            });
-        }
+
+        cmd();
+
+//        fekitConfig.docs.forEach(function (file) {
+//            self.cmd(file, false);
+//        });
     }
 }
 
 
 exports.set_options = function (optimist) {
-    optimist.alias('d', 'dest')
+    optimist.alias('d', 'dest');
     return optimist.describe('d', '指定文档输出路径，如 fekit doc -d docs， 默认为docs');
 }
 
 
 exports.run = function (options) {
     task.init(options);
-    task.generate();
 }
+
+//task.init({cwd: '/Users/hanan/project/static/common/Popup'});
