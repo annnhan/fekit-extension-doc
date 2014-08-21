@@ -112,4 +112,4 @@ exports.run = function (options) {
     task.init(options);
 }
 
-//task.init({cwd: '/Users/hanan/project/static/common/Slider'});
+task.init({cwd: '/Users/hanan/project/static/common/Slider'});
