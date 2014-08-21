@@ -8,6 +8,7 @@ var fs = require('fs');
 var path = require('path');
 var child_process = require('child_process');
 var jsdoc = path.resolve(__dirname, './node_modules/jsdoc/jsdoc.js');
+var docTemplate = path.resolve(__dirname, 'tpl');
 
 //fekit.config
 var fekitConfig = null;
@@ -54,7 +55,7 @@ var task = {
             return path.resolve(cwd, docDest, file.replace(/\.js$/, ''));
         }();
 
-        var process = child_process.fork(jsdoc, ['--destination', output, source], {cwd: cwd});
+        var process = child_process.fork(jsdoc, ['-d', output, '-t', docTemplate, source], {cwd: cwd});
 
         console.log('[LOG] 开始生成文档:', source);
 
@@ -111,4 +112,4 @@ exports.run = function (options) {
     task.init(options);
 }
 
-//task.init({cwd: '/Users/hanan/project/static/common/Popup'});
+//task.init({cwd: '/Users/hanan/project/static/common/Slider'});
