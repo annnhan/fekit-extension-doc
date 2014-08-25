@@ -111,5 +111,3 @@ exports.set_options = function (optimist) {
 exports.run = function (options) {
     task.init(options);
 }
-
-task.init({cwd: '/Users/hanan/project/static/common/Slider'});
